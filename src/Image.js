@@ -15,7 +15,8 @@ type ImageProps = {
     options?: DownloadOptions,
     uri: string,
     transitionDuration?: number,
-    tint?: "dark" | "light"
+    tint?: "dark" | "light",
+    onError?: () => {}
 };
 
 type ImageState = {
@@ -37,11 +38,16 @@ export default class Image extends React.Component<ImageProps, ImageState> {
         intensity: new Animated.Value(100)
     };
 
-    async load({uri, options = {}}: ImageProps): Promise<void> {
+    async load({uri, options = {}, onError}: ImageProps): Promise<void> {
         if (uri) {
-            const path = await CacheManager.get(uri, options).getPath();
-            if (this.mounted) {
-                this.setState({ uri: path });
+            try{
+                const path = await CacheManager.get(uri, options).getPath();
+                if (this.mounted) {
+                    this.setState({ uri: path });
+                }
+            }
+            catch(e){
+                onError(e);
             }
         }
     }
