@@ -1,3 +1,7 @@
+# ADDED Image.onError Prop
+
+--------------
+
 # React Native Image Cache and Progressive Loading
 
 
